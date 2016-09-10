@@ -2,16 +2,16 @@ lab1: bin/main.o bin/algorithm.o bin/util.o bin/io.o
 	mkdir -p bin
 	gcc bin/main.o bin/algorithm.o bin/util.o bin/io.o -o lab1
 bin/main.o: src/main.c
-	mkdir -p bin
+	mkdir -p bin 
 	gcc -c -I./include src/main.c -o bin/main.o
 bin/algorithm.o: src/algorithm.c
-	mkdir -p bin
+	mkdir -p bin 
 	gcc -c -I./include src/algorithm.c -o bin/algorithm.o
 bin/util.o: src/util.c
-	mkdir -p bin
+	mkdir -p bin 
 	gcc -c -I./include src/util.c -o bin/util.o
 bin/io.o: src/io.c
-	mkdir -p bin
+	mkdir -p bin 
 	gcc -c -I./include src/io.c -o bin/io.o
 clean:
 	rm -rf bin
