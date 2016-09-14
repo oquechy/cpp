@@ -1,4 +1,4 @@
-lab1: clean bin bin/main.o bin/algorithm.o bin/util.o bin/io.o
+lab1: bin bin/main.o bin/algorithm.o bin/util.o bin/io.o
 	gcc bin/main.o bin/algorithm.o bin/util.o bin/io.o -o lab1
 bin:
 	mkdir -p bin
