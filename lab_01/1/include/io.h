@@ -1,4 +1,4 @@
 #ifndef IO
-#define IO
+#define IO             
 void logDebug(char c);
 #endif
