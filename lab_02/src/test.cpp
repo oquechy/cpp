@@ -22,13 +22,13 @@ int main(void) {
 	printf("Strcpy #2: %d\n", !strcmp(res, ans));
 	ians = strcmp(s, s);
 	strcmp_test(s, s, &ires, &ians);
-	printf("Strcmp #1: %d\n", (ires == ians));
+	printf("Strcmp #1: %d\n", (ires == 0 && ians == 0 || ires * ians > 0));
 	ians = strcmp(s, s2);
 	strcmp_test(s, s2, &ires, &ians);
-	printf("Strcmp #2: %d\n", (ires == ians));
+	printf("Strcmp #2: %d\n", (ires == 0 && ians == 0 || ires * ians > 0));
 	ians = strcmp(s1, s);
 	strcmp_test(s1, s, &ires, &ians);
-	printf("Strcmp #3: %d\n", (ires == ians));
+	printf("Strcmp #3: %d\n", (ires == 0 && ians == 0 || ires * ians > 0));
 	stans = strlen(s);
 	strlen_test(s, &stres, &stans);
 	printf("Strlen #1: %d\n", (stres == stans));
