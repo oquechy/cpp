@@ -1,4 +1,4 @@
-#pragma once
+#pragma once   
 
 char * strcpy(char * destination, const char * source);
 char * strcat(char * destination, const char * source);
