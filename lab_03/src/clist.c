@@ -9,12 +9,10 @@ void init_list(struct intrusive_list *l) {
 }
 
 struct intrusive_node add_node(struct intrusive_list *l, struct intrusive_node *n) {
-	struct intrusive_node *cur = l->head;
-	while (cur->next)
-		cur = cur->next;
-	cur->next = n;
-	n->prev = cur;
-	n->next = 0;
+	if (l->head->next) 
+		l->head->next->prev = n;
+	n->next = l->head->next;
+	l->head->next = n;
 	return *n;
 }
 

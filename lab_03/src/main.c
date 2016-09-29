@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stddef.h>
-#include <stdlib.h>
+#include <stdlib.h>     
 #include "clist.h"
 
 #define container_of(ptr, type, member) (type*)((char*)(ptr) - offsetof(type, member))
@@ -31,9 +31,6 @@ int remove_position(struct intrusive_list *l, int x, int y) { // removes all (x,
 }
 
 int add_position(struct intrusive_list *l, int x, int y) {
-	struct intrusive_node *cur = l->head;
-	while (cur->next)
-		cur = cur->next;
 	struct position_node *new_position = (struct position_node *)malloc(sizeof(struct position_node));
 	new_position->x = x;
 	new_position->y = y;
@@ -79,7 +76,7 @@ int main() {
 	struct intrusive_list l;
 	init_list(&l);
 
-	while (scanf("%s", &input)) {
+	while (scanf("%s", input)) {
 		if (!strcmp(input, add)) {
 			scanf("%i %i", &x, &y);
 			add_position(&l, x, y);
