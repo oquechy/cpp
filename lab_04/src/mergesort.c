@@ -22,7 +22,7 @@ void * copy(void *dst, const void *src, size_t len) {
 }
 
 int mergesort(void *base, size_t num, size_t size, int(*compar)(const void*, const void*)) {
-	if (num == 1)
+	if (num <= 1)
 		return 0;
 
 	char *b = base;
