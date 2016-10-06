@@ -37,7 +37,11 @@ int cmp_s(const void *s1, const void *s2) {
 }
 
 int to_int(char *s) {
-	int x = 0, sign = 1 - 2 * (s[0] == '-');
+	int x = 0, sign = 1;
+	if (s[0] == '-') {
+		sign = -1;
+		++s;
+	}
 	while (*s)
 		x = x * 10 + *s++ - '0';
 	return sign * x;
@@ -46,7 +50,7 @@ int to_int(char *s) {
 int main(int argc, char **argv) {
 	int n[100], i;
 	char c[100], ints[] = "int", chars[] = "char";
-	if (argv[1] == ints) {
+	if (!strcmp(argv[1], ints)) {
 		for (i = 0; i < argc - 2; ++i)
 			n[i] = to_int(argv[i + 2]);
 		mergesort(n, argc - 2, sizeof(int), cmp_i);
@@ -54,7 +58,7 @@ int main(int argc, char **argv) {
 			printf("%i ", n[i]);
 		printf("\n");
 	}
-	else if (argv[1] == chars) {
+	else if (!strcmp(argv[1], chars)) {
 		for (i = 0; i < argc - 2; ++i)
 			c[i] = argv[i + 2][0];
 		mergesort(c, argc - 2, 1, cmp_c);
