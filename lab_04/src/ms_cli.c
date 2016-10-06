@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+//#include <vld.h>
 #include "mergesort.h"
-
 /*2. –еализовать программу, котора€ сортирует переданные в качестве аргументов данные 
 (ms_cli.c) и печатает отсортированный массив. Ёлементы раздел€ютс€ пробелом.
 
@@ -48,23 +49,27 @@ int to_int(char *s) {
 }
 
 int main(int argc, char **argv) {
-	int n[100], i;
-	char c[100], ints[] = "int", chars[] = "char";
+	int *n, i;
+	char *c, ints[] = "int", chars[] = "char";
 	if (!strcmp(argv[1], ints)) {
+		n = malloc((argc - 2) * sizeof(int));
 		for (i = 0; i < argc - 2; ++i)
 			n[i] = to_int(argv[i + 2]);
 		mergesort(n, argc - 2, sizeof(int), cmp_i);
 		for (i = 0; i < argc - 2; ++i)
 			printf("%i ", n[i]);
 		printf("\n");
+		free(n);
 	}
 	else if (!strcmp(argv[1], chars)) {
+		c = malloc(argc - 2);
 		for (i = 0; i < argc - 2; ++i)
 			c[i] = argv[i + 2][0];
 		mergesort(c, argc - 2, 1, cmp_c);
 		for (i = 0; i < argc - 2; ++i)
 			printf("%c ", c[i]);
 		printf("\n");
+		free(c);
 	}
 	else {
 		mergesort(argv + 2, argc - 2, sizeof(char *), cmp_s);
