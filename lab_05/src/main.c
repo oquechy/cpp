@@ -66,12 +66,12 @@ int main(int argc, char **argv) {
 		in = fopen(argv[2], "rt");
 		while (!feof(in)) {
 			fscanf(in, "%i %i\n", &x, &y);
-			printf("%i %i\n", x, y);
+			//printf("%i %i\n", x, y);
 			add_position(l, x, y);
 		}
 		fclose(in);
 	}
-	show_all_positions(l);
+	//show_all_positions(l);
 	if (!strcmp(argv[3], stxt)) {
 		out = fopen(argv[4], "wt");
 		save_txt(out, l);
