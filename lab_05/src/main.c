@@ -44,6 +44,13 @@ void apply(intrusive_list *lst, void(*op)(void *node, void *param), void *param)
 		op(node, param);
 }
 
+
+int to_signed(int x) {
+	if ((x >> 23) & 1) 
+		return (x | (-1 << 24));
+	return x;
+}
+
 int main(int argc, char **argv) {
 	intrusive_list list;
 	intrusive_list* l = &list;
@@ -54,11 +61,12 @@ int main(int argc, char **argv) {
 	FILE *in, *out;
 	if (!strcmp(argv[1], lbin)) {
 		in = fopen(argv[2], "rb");
-		printf("%i file\n", (in == 0));
+		//printf("%i file\n", (in == 0));
 		while (fread(&x, 3, 1, in)) {
 			fread(&y, 3, 1, in);
-			printf("%i %i\n", x, y);
-			add_position(l, x, y);
+
+			//printf("%i %i\n", x, y);
+			add_position(l, to_signed(x), to_signed(y));
 		}
 		fclose(in);
 	}
