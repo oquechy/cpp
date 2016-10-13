@@ -33,6 +33,7 @@ void print(void *node, void *fmt) {
 }
 
 void count(void *node, void *res) {
+//	position_node *pnode = get_position(node);
 	++*(int *)res;
 }
 
@@ -73,9 +74,9 @@ int main(int argc, char **argv) {
 	else {
 		in = fopen(argv[2], "rt");
 		while (!feof(in)) {
-			fscanf(in, "%i %i\n", &x, &y);
+			if (fscanf(in, "%i %i\n", &x, &y) == 2)
 			//printf("%i %i\n", x, y);
-			add_position(l, x, y);
+				add_position(l, x, y);
 		}
 		fclose(in);
 	}
