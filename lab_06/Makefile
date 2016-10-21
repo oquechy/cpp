@@ -1,16 +1,16 @@
 CC=gcc
 CFLAGS=-c -Wall -I./include
 
-TARGET=main
+TARGET=phonebook
 
-_OBJ = clist.o position.o $(TARGET).o 
+_OBJ = $(TARGET).o 
 OBJ = $(patsubst %,bin/%,$(_OBJ))
 
-_DEPS = clist.h position.h
+_DEPS = names.h phonebook.h
 DEPS = $(patsubst %,include/%,$(_DEPS))
 
 $(TARGET): bin $(OBJ) 
-	$(CC) $(OBJ) -o $@
+	$(CC) $(OBJ) -lexpat -o $@
 
 bin:
 	mkdir -p $@

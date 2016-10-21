@@ -8,4 +8,3 @@ const char *kNames[NAMES_CNT] = {"Adelaida",  "Aelita",  "Agniya",  "Agrippina",
 
 #define MIDDLE_NAMES_CNT 49
 const char *kMiddleNames[MIDDLE_NAMES_CNT] = {"Aleksandrovna",  "Alekseevna",  "Anatolyevna",  "Andreevna",  "Antonovna",  "Arkadyevna",  "Bogdanovna",  "Borisovna",  "Danilovna",  "Dmitrievna",  "Eduardovna",  "Efimovna",  "Egorovna",  "Evgenyevna",  "Fedorovna",  "Feliksovna",  "Filippovna",  "Genadievna",  "Georgievna",  "Grigoryevna",  "Igorevna",  "Ilyinichna",  "Ivanovna",  "Kirillovna",  "Konstantinovna",  "Leonidovna",  "Lyvovna",  "Maksimovna",  "Mihaylovna",  "Nikolaevna",  "Olegovna",  "Pavlovna",  "Petrovna",  "Robertovna",  "Romanovna",  "Semenovna",  "Sergeevna",  "Stanislavovna",  "Stepanovna",  "Tarasovna",  "Valentinovna",  "Valeryevna",  "Vasilyevna",  "Viktorovna",  "Vladimirovna",  "Vladislavovna",  "Vyacheslavovna",  "Yakovlevna",  "Yuryevna"};
-
