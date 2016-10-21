@@ -5,30 +5,12 @@
 #include "phonebook.h"
 #include "names.h"
 
-/*
-#include <stddef.h>
-
-typedef struct human_s {
-    char name[256];
-    char middle_name[256];
-    char family_name[256];
-    char phones[10][21];
-} human_t;
-
-typedef struct phonebook_s {
-    human_t *humans;
-    size_t size;
-    size_t capacity;
-} phonebook_t;
-
-*/
-
 #define BUFFER_SIZE 100000
 
 typedef struct data_s{
     phonebook_t *book;
     human_t h;
-    int human_i, phone_i;
+    int phone_i;
 } data_t;
 
 void start_element(void *data, const char *element, const char **attribute) {
@@ -69,9 +51,7 @@ void push_back_human(phonebook_t *book, human_t *human) {
         book->capacity = 2 * book->capacity + 1;
         book->humans = realloc(book->humans, book->capacity * sizeof(human_t));
     }
-    //printf("!!! %zu %zu \n", sizeof(book->humans[book->size]), sizeof(*human));
     memcpy(&book->humans[book->size++], human, sizeof(human_t));
-    //printf("!!! %zu\n", sizeof(human_t));
 }
 
 int family_cmp(const void *h1, const void *h2) {
@@ -158,7 +138,7 @@ int load_phonebook_xml(const char *filename, phonebook_t *book) {
 
     data_t book_data;
     book_data.book = book;
-    book_data.human_i = book_data.phone_i = 0;
+    book_data.phone_i = 0;
 
     XML_Parser  parser = XML_ParserCreate(NULL);
     XML_SetElementHandler(parser, start_element, end_element);
@@ -181,23 +161,7 @@ int load_phonebook_xml(const char *filename, phonebook_t *book) {
     XML_ParserFree(parser);
     fclose(fp);
 
-   // print_phonebook(book);
-   // printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
     qsort(book->humans, book->size, sizeof(human_t), family_cmp);
-   // print_phonebook(book);
-   // printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
-    return 0;
-}
 
-int main(int argc, char **argv) {
-    phonebook_t book;
-    book.size = 0;
-    book.capacity = 0;
-    book.humans = NULL;
-    load_phonebook_xml(argv[1], &book);
-    print_phonebook(&book);
-    gen_phonebook(&book, rand() % 20 + 1);
-    save_phonebook_xml(argv[2], &book);
-    clear_phonebook(&book);
     return 0;
 }

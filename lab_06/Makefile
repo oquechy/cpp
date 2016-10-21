@@ -1,9 +1,9 @@
 CC=gcc
 CFLAGS=-c -Wall -I./include
 
-TARGET=phonebook
+TARGET=main
 
-_OBJ = $(TARGET).o 
+_OBJ = phonebook.o $(TARGET).o 
 OBJ = $(patsubst %,bin/%,$(_OBJ))
 
 _DEPS = names.h phonebook.h
