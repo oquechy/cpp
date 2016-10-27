@@ -5,16 +5,20 @@
 #include "phonebook.h"
 #include "names.h"
 
-#define BUFFER_SIZE 100000
+#define BUFFER_SIZE 10000
 
 typedef struct data_s{
     phonebook_t *book;
     human_t h;
     int phone_i;
+    int start_p, len_p, i_p;
 } data_t;
 
 void start_element(void *data, const char *element, const char **attribute) {
     data_t *d = (data_t *)data;
+    if (!strcmp(element, "phone")) {
+        d->start_p = 1;
+    }
     if (!strcmp(element, "human")) {
         char name[1000];
         strcpy(name, attribute[1]);
@@ -32,6 +36,10 @@ void end_element(void *data, const char *element) {
         d->phone_i = 0;
         push_back_human(d->book, &d->h);
     }
+    if (!strcmp(element, "phone")) {
+        d->start_p = 0;
+        ++d->phone_i;
+    }
 }
 
 void handle_data(void *data, const char *content, int length) {
@@ -40,8 +48,13 @@ void handle_data(void *data, const char *content, int length) {
     strncpy(tmp, content, length);
     tmp[length] = '\0';
     if ('0' <= tmp[0] && tmp[0] <= '9') {
-        strcpy(d->h.phones[d->phone_i], tmp);
-        ++d->phone_i;
+        if (!d->start_p){
+            strcpy(d->h.phones[d->phone_i] + d->len_p, tmp);
+        }
+        else {
+            strcpy(d->h.phones[d->phone_i], tmp);
+            d->len_p = length;
+        }
     }
     free(tmp);
 }
@@ -156,6 +169,9 @@ int load_phonebook_xml(const char *filename, phonebook_t *book) {
             printf("Error: %s\n", XML_ErrorString(XML_GetErrorCode(parser)));
             return 2;
         }
+//        printf("buff -- %i\n", len);
+        book_data.start_p = 0;
+
     } while (!done);
 
     XML_ParserFree(parser);

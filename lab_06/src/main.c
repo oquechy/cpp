@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
     book.humans = NULL;
     load_phonebook_xml(argv[1], &book);
     print_phonebook(&book);
-    gen_phonebook(&book, rand() % 20 + 1);
+    gen_phonebook(&book, rand() % 100 + 5);
     save_phonebook_xml(argv[2], &book);
     clear_phonebook(&book);
     return 0;
