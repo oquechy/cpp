@@ -16,7 +16,7 @@ typedef struct data_s{
 void start_element(void *data, const char *element, const char **attribute) {
     data_t *d = (data_t *)data;
     if (!strcmp(element, "human")) {
-        char name[256];
+        char name[1000];
         strcpy(name, attribute[1]);
         strcpy(d->h.name, strtok(name, " "));
         strcpy(d->h.middle_name, strtok(NULL, " "));
