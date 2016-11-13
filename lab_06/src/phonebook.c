@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <expat.h>
-#include "phonebook.h"
-#include "names.h"
+#include "../include/phonebook.h"
+#include "../include/names.h"
 
 #define BUFFER_SIZE 10000
 
@@ -39,14 +39,18 @@ void end_element(void *data, const char *element) {
     if (!strcmp(element, "phone")) {
         d->start_p = 0;
         ++d->phone_i;
+        d->len_p = 0;
     }
 }
 
 void handle_data(void *data, const char *content, int length) {
     data_t *d = (data_t *)data;
+    //int i;
     char *tmp = (char *)malloc((size_t)length + 1);
     strncpy(tmp, content, length);
     tmp[length] = '\0';
+    //if (!strcmp("Lazareva01119", d->h.family_name))
+      //  i = 0;
     if ('0' <= tmp[0] && tmp[0] <= '9') {
         if (!d->start_p){
             strcpy(d->h.phones[d->phone_i] + d->len_p, tmp);

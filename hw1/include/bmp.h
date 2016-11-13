@@ -36,11 +36,20 @@ typedef struct tagBMP {
     BYTE **px;
 } BMP, *PBMP;
 
+typedef struct tagKEY {
+    int x, y, lsh, size;
+} key;
+
 void load_bmp(PBMP bmp, FILE *f);
 void save_bmp(PBMP bmp, FILE *f);
+
 void crop(PBMP bmp, int x, int y, int w, int h);
 void rotate(PBMP bmp);
 void clean(PBMP bmp);
 void resize(PBMP bmp);
+
+void parse_key(key *k, FILE *f);
+char * extract(PBMP bmp, key *k);
+void insert(PBMP bmp, key *k, char *msg);
 
 #endif //HW1_BMP_H

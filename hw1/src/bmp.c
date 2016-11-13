@@ -81,3 +81,64 @@ void resize(PBMP bmp) {
     DWORD pw = (DWORD)(4 - 3 * bmp->info.biWidth % 4) % 4;
     bmp->info.biSizeImage = bmp->info.biHeight * (3 * bmp->info.biWidth + pw);
 }
+
+void parse_key(key *k, FILE *f) {
+    char lsh;
+    int i;
+    for (i = 0; fscanf(f, "%d%d%c", &k[i].x, &k[i].y, &lsh) == 3; ++i) {
+        if (lsh == 'B')
+            k[i].lsh = 0;
+        else if (lsh == 'G')
+            k[i].lsh = 1;
+        else
+            k[i].lsh = 2;
+    }
+    k->size = i;
+}
+
+char encode(char c) {
+    if ('a' <= c && c <= 'z')
+        return c - (char)'a';
+    if (c == ' ')
+        return 26;
+    if (c == '.')
+        return 27;
+    return 28;
+}
+
+char decode(char b) {
+    if (0 <= b && b <= 25)
+        return b + (char)'a';
+    if (b == 26)
+        return ' ';
+    if (b == 27)
+        return '.';
+    return ',';
+}
+
+void set(char *x, int i, int b) {
+    if (b)
+        *x |= 1 << i;
+    else
+        *x &= -1 - (1 << i);
+}
+
+void insert(PBMP bmp, key *k, char *msg) {
+    for (int i = 0; i < k->size;) {
+        char b = encode(msg[i / 5]);
+        for (int j = 0; j < 5; ++j, ++i)
+            set((char *)bmp->px[k[i].y] + 3 * k[i].x + k[i].lsh, 0, b >> j);
+    }
+}
+
+char * extract(PBMP bmp, key *k) {
+    char *msg = malloc((size_t)k->size / 5 + 1);
+    for (int i = 0; i < k->size;) {
+        char b = 0;
+        for (int j = 0; j < 5; ++j, ++i)
+            set(&b, j, *(bmp->px[k[i].y] + 3 * k[i].x + k[i].lsh) & 1);
+        msg[i / 5] = decode(b);
+    }
+    msg[k->size / 5] = 0;
+    return msg;
+}
