@@ -85,7 +85,7 @@ void resize(PBMP bmp) {
 void parse_key(key *k, FILE *f) {
     char lsh;
     int i;
-    for (i = 0; fscanf(f, "%d%d%c", &k[i].x, &k[i].y, &lsh) == 3; ++i) {
+    for (i = 0; fscanf(f, "%d %d %c", &k[i].x, &k[i].y, &lsh) == 3; ++i) {
         if (lsh == 'B')
             k[i].lsh = 0;
         else if (lsh == 'G')
@@ -120,24 +120,28 @@ void set(char *x, int i, int b) {
     if (b)
         *x |= 1 << i;
     else
-        *x &= -1 - (1 << i);
+        *x &= (unsigned)(-1 - (1 << i));
 }
 
 void insert(PBMP bmp, key *k, char *msg) {
     for (int i = 0; i < k->size;) {
         char b = encode(msg[i / 5]);
         for (int j = 0; j < 5; ++j, ++i)
-            set((char *)bmp->px[k[i].y] + 3 * k[i].x + k[i].lsh, 0, b >> j);
+            set((char *)bmp->px[k[i].y] + 3 * k[i].x + k[i].lsh, 0, (b >> j) & 1);
     }
 }
 
 char * extract(PBMP bmp, key *k) {
     char *msg = malloc((size_t)k->size / 5 + 1);
+    if (!msg) {
+        printf("memory error\n");
+        exit(18);
+    }
     for (int i = 0; i < k->size;) {
         char b = 0;
         for (int j = 0; j < 5; ++j, ++i)
             set(&b, j, *(bmp->px[k[i].y] + 3 * k[i].x + k[i].lsh) & 1);
-        msg[i / 5] = decode(b);
+        msg[(i / 5) - 1] = decode(b);
     }
     msg[k->size / 5] = 0;
     return msg;
