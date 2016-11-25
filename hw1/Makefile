@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-c -Wall -I./include -std=c99 -Wall -Werror
+CFLAGS=-c -g -Wall -I./include -std=c99 -Wall -Werror
 
 TARGET=main
 

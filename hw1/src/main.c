@@ -93,7 +93,7 @@ int insert_msg(char **argv) {
     }
     fseek (f, 0, SEEK_END);
     len = (size_t)ftell(f);
-    char *msg = malloc(len);
+    char *msg = malloc(len + 1);
     if (!msg) {
         printf("memory error\n");
         return 16;

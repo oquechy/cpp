@@ -80,6 +80,7 @@ void clean(PBMP bmp) {
 void resize(PBMP bmp) {
     DWORD pw = (DWORD)(4 - 3 * bmp->info.biWidth % 4) % 4;
     bmp->info.biSizeImage = bmp->info.biHeight * (3 * bmp->info.biWidth + pw);
+    bmp->file.bfSize = bmp->info.biSizeImage + bmp->file.bfOffBits;
 }
 
 void parse_key(key *k, FILE *f) {
@@ -97,8 +98,8 @@ void parse_key(key *k, FILE *f) {
 }
 
 char encode(char c) {
-    if ('a' <= c && c <= 'z')
-        return c - (char)'a';
+    if ('A' <= c && c <= 'Z')
+        return c - (char)'A';
     if (c == ' ')
         return 26;
     if (c == '.')
@@ -108,7 +109,7 @@ char encode(char c) {
 
 char decode(char b) {
     if (0 <= b && b <= 25)
-        return b + (char)'a';
+        return b + (char)'A';
     if (b == 26)
         return ' ';
     if (b == 27)
