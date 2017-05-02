@@ -1,0 +1,175 @@
+//
+// Created by oquechy on 12.04.17.
+//
+
+#include "huffman.h"
+#include "bitstream.h"
+
+using namespace std;
+
+// huff_tree::node
+
+huff_tree::node::node(int freq, node_type type)
+        : type(type), freq(freq)
+{}
+
+huff_tree::node::~node() {}
+
+bool huff_tree::node::type_is(node_type t) const {
+    return (type == t);
+}
+
+huff_tree::path_node::path_node(node *zero, node *one)
+        : node(zero->freq + one->freq, path), to{zero, one}
+{}
+
+huff_tree::path_node::~path_node() {
+    delete to[0];
+    delete to[1];
+}
+
+huff_tree::symbol_node::symbol_node(int freq, char alpha)
+        : node(freq, symbol), alpha(alpha)
+{}
+
+bool huff_tree::cmp_nodes::operator()(const node *n1, const node *n2) {
+    return (n1->freq > n2->freq);
+}
+
+// huff_tree
+
+huff_tree::huff_tree()
+        : root(0)
+{}
+
+void huff_tree::build(const std::vector<int> &met){
+    priority_queue<node*, std::vector<node*>, cmp_nodes> freqs;
+
+    for (int i = 0; i < MAXS; ++i)
+        if (met[i])
+            freqs.push(new symbol_node(met[i], static_cast<char>(i)));
+
+    if (!freqs.size())
+        return;
+
+    if (freqs.size() == 1) {
+        huff_code[static_cast<symbol_node *>(freqs.top())->alpha].push_back(0);
+        return;
+    }
+
+    while (freqs.size() > 1) {
+        node* zero = freqs.top();
+        freqs.pop();
+        node* one = freqs.top();
+        freqs.pop();
+        freqs.push(new path_node(zero, one));
+    }
+
+    root = freqs.top();
+    gen_codes();
+}
+
+void huff_tree::walk(const node* cur, sequence& cur_code) {
+    if (cur->type_is(symbol))
+        huff_code[reinterpret_cast<const symbol_node *>(cur)->alpha] = sequence(cur_code);
+
+    else if (cur->type_is(path)) {
+        cur_code.push_back(0);
+        walk(reinterpret_cast<const path_node *>(cur)->to[0], cur_code);
+        cur_code.pop_back();
+        cur_code.push_back(1);
+        walk(reinterpret_cast<const path_node *>(cur)->to[1], cur_code);
+        cur_code.pop_back();
+    }
+}
+
+void huff_tree::gen_codes() {
+    sequence cur_code;
+    walk(root, cur_code);
+}
+
+huff_tree::sequence& huff_tree::operator[](char c) {
+    return huff_code[c];
+}
+
+void huff_tree::start_decode(sequence &dst) {
+    dst.clear();
+    cur_code = &dst;
+    cur_node = root;
+}
+
+bool huff_tree::do_step(bool b) {
+    if
+}
+
+huff_tree::~huff_tree() {
+    delete root;
+}
+
+// huff_archiver
+
+huff_archiver::huff_archiver()
+        : tree_size(0), freqs(MAXS, 0)
+{}
+
+void huff_archiver::load(std::string infile) {
+    ifstream in(infile, ios::binary);
+
+    in.seekg(0, ios::end);
+    input_size = static_cast<int>(in.tellg());
+    in.seekg(0, ios::beg);
+
+    for (int i = 0; i < input_size; ++i) {
+        char c;
+        in.read(&c, sizeof(c));
+        if (!freqs[static_cast<size_t>(c)])
+            symbols.push_back(c);
+        ++freqs[static_cast<size_t>(c)];
+    }
+}
+
+void huff_archiver::stats() {
+    cout << input_size << '\n' << tree_size << '\n' << compress_size << '\n';
+}
+
+void huff_archiver::compress(std::string infile, std::string outfile) {
+    load(infile);
+
+    tree.build(freqs);
+
+    ofstream out(outfile, ios::binary);
+    int uniq = static_cast<int>(symbols.size());
+    out.write(reinterpret_cast<char *>(&uniq), sizeof(uniq));
+    tree_size += sizeof(uniq);
+    for (auto i : symbols)
+        if (tree[i].size()) {
+            out.write(&i, sizeof(i));
+            out.write(reinterpret_cast<char *>(&freqs[i]), sizeof(freqs[i]));
+            tree_size += sizeof(i) + sizeof(freqs[i]);
+        }
+    out.close();
+
+    ifstream in(infile, ios::binary);
+    obitstream bout(outfile, ios::app);
+    for (int i = 0; i < input_size; ++i) {
+        char c;
+        in.read(&c, sizeof(c));
+        bout << tree[c];
+    }
+
+}
+
+void huff_archiver::decompress(std::string infile, std::string outfile) {
+    ifstream in(infile, ios::binary);
+    int uniq;
+    in.read(reinterpret_cast<char *>(&uniq), sizeof(uniq));
+    for (int i = 0; i < uniq; ++i) {
+        char c;
+        in.read(&c, sizeof(c));
+        in.read(reinterpret_cast<char *>(&freqs[c]), sizeof(freqs[i]));
+    }
+
+    tree.build(freqs);
+
+}
+

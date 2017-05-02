@@ -1,0 +1,1 @@
+/usr/bin/c++    -std=c++11   CMakeFiles/empl_db.dir/src/employees.o CMakeFiles/empl_db.dir/src/main.o  -o empl_db -rdynamic 

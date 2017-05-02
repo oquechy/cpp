@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/oquechy/Documents/cpp/lab_11/include/employees.h
+stdint.h
+-
+iostream
+-
+fstream
+-
+
+/home/oquechy/Documents/cpp/lab_11/src/employees.cpp
+../include/employees.h
+/home/oquechy/Documents/cpp/lab_11/include/employees.h
+string.h
+-
+string
+-
+cstring
+-
+
+/home/oquechy/Documents/cpp/lab_11/src/main.cpp
+../include/employees.h
+/home/oquechy/Documents/cpp/lab_11/include/employees.h
+string
+-
+cstring
+-
+

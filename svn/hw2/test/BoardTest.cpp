@@ -62,7 +62,7 @@ void BoardTest::moveTest3() {
     for (int i = 0; i < 10; ++i)
         for (int j = 0; j < 10; ++j)
             if (i == 1 && j == 1)
-                DO_CHECK(b.Cell(1, 1tt) == 'O');
+                DO_CHECK(b.Cell(1, 1) == 'O');
             else if (i == 9 && j == 9)
                 DO_CHECK(b.Cell(9, 9) == 'X');
             else

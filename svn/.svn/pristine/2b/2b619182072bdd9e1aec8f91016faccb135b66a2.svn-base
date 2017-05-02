@@ -1,0 +1,85 @@
+//
+// Created by oquechy on 12.04.17.
+//
+
+#ifndef HW03_HUFFMAN_H
+#define HW03_HUFFMAN_H
+
+#include <iostream>
+#include <queue>
+#include <map>
+#include <algorithm>
+#include <deque>
+#include <fstream>
+#include <sstream>
+
+class huff_tree{
+private:
+    enum node_type { symbol, path };
+
+
+    typedef std::deque<bool> sequence;
+    typedef std::map<char, sequence> code_map;
+
+    class node {
+    protected:
+        const node_type type;
+    public:
+        const int freq;
+        node(int freq, node_type type);
+        virtual ~node();
+        bool type_is(node_type t) const;
+    };
+
+    class path_node : public node {
+    public:
+        node *to[2];
+        path_node(node *zero, node *one);
+        ~path_node();
+    };
+
+    class symbol_node : public node {
+    public:
+        const char alpha;
+        symbol_node(int freq, char alpha);
+    };
+
+    struct cmp_nodes {
+        bool operator()(const node* n1, const node* n2);
+    };
+
+    node *root, *cur_node;
+    code_map huff_code;
+    sequence *cur_code;
+    void walk(const node* cur, sequence& cur_code);
+    void gen_codes();
+
+public:
+    huff_tree();
+    void build(const std::vector<int> &met);
+    void start_decode(sequence &cur_code);
+    bool do_step(bool b);
+    sequence& operator[](char c);
+    ~huff_tree();
+};
+
+class huff_archiver{
+private:
+
+    void load(std::string infile);
+
+    static const int MAXS = 1 << 8;
+
+    huff_tree tree;
+    int input_size, compress_size, tree_size;
+    std::vector<int> freqs;
+    std::vector<char> symbols;
+    void stats();
+
+public:
+    huff_archiver();
+    void compress(std::string infile, std::string outfile);
+    void decompress(std::string infile, std::string outfile);
+};
+
+#endif //HW03_HUFFMAN_H

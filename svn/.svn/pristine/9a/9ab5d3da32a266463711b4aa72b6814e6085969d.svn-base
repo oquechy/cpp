@@ -17,7 +17,6 @@ public:
 
 #include "BoardView.h"
 #include "cstdio"
-#include <ncurses.h>
 
 View::View(Board &b) : _board(b) {}
 

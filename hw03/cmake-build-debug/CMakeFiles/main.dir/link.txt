@@ -1,0 +1,1 @@
+clang++    -std=c++11 -pedantic -Wall -Wextra -Werror -g   CMakeFiles/main.dir/src/main.cpp.o CMakeFiles/main.dir/src/huffman.cpp.o CMakeFiles/main.dir/src/bitstream.cpp.o  -o ../main /usr/lib/libgtest.a -lpthread 
